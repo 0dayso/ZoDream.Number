@@ -1,0 +1,36 @@
+﻿<Window x:Class="ZoDream.Number.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ignore="http://www.galasoft.ch/ignore"
+        mc:Ignorable="d ignore"
+        Height="300"
+        Width="300"
+        Title="ZoDream 号码助手"
+        DataContext="{Binding Main, Source={StaticResource Locator}}" Icon="Image/zodream.ico" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Skins/MainSkin.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Button Content="打开浏览器" Command="{Binding OpenWebCommand}"/>
+        <Button Content="爬虫搜索" Command="{Binding OpenSpiderCommand}" Grid.Column="1"/>
+        <Button Content="归属地查询" Command="{Binding OpenSearchCommand}" Grid.Column="1" Grid.Row="1"/>
+        <Button Content="合并号码" Command="{Binding OpenFileCommand}" Grid.Row="1"/>
+    </Grid>
+</Window>
