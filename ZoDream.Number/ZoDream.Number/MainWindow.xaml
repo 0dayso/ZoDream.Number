@@ -22,15 +22,25 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-        <Button Content="打开浏览器" Command="{Binding OpenWebCommand}"/>
-        <Button Content="爬虫搜索" Command="{Binding OpenSpiderCommand}" Grid.Column="1"/>
-        <Button Content="归属地查询" Command="{Binding OpenSearchCommand}" Grid.Column="1" Grid.Row="1"/>
-        <Button Content="合并号码" Command="{Binding OpenFileCommand}" Grid.Row="1"/>
+        <Menu Grid.ColumnSpan="3">
+            <MenuItem Header="数据库">
+                <MenuItem Header="连接数据库" Command="{Binding OpenDatabaseCommand}"/>
+                <MenuItem Header="更新数据库" Command="{Binding UpdateDatabaseCommand}" Visibility="{Binding DatabaseVisibility}"/>
+                <MenuItem Header="导入数据库" Command="{Binding ImportCommand}" Visibility="{Binding DatabaseVisibility}"/>
+                <MenuItem Header="导出数据库" Command="{Binding ExportCommand}" Visibility="{Binding DatabaseVisibility}"/>
+            </MenuItem>
+        </Menu>
+        <Button Content="打开浏览器" Command="{Binding OpenWebCommand}" Grid.Row="1" Grid.Column="0" />
+        <Button Content="爬虫搜索" Command="{Binding OpenSpiderCommand}" Grid.Row="1" Grid.Column="1"/>
+        <Button Content="合并号码" Command="{Binding OpenFileCommand}" Grid.Row="1" Grid.Column="2" />
+        <Button Content="号码搜索" Visibility="{Binding DatabaseVisibility}" Command="{Binding OpenFilterCommand}" Grid.Row="2" Grid.Column="0"/>
+        <Button Content="归属地查询" Visibility="{Binding DatabaseVisibility}" Command="{Binding OpenSearchCommand}" Grid.Column="1" Grid.Row="2"/>
     </Grid>
 </Window>

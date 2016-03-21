@@ -19,6 +19,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Grid>
             <Expander Header="设置">
@@ -62,6 +63,12 @@
                     <GridViewColumn Header="状态" Width="200" DisplayMemberBinding="{Binding Status}"/>
                 </GridView>
             </ListView.View>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="清除完成" Command="{Binding ClearCompleteCommand}"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
         </ListView>
+        <TextBlock Grid.Row="2" Text="{Binding Message}"/>
     </Grid>
 </Window>

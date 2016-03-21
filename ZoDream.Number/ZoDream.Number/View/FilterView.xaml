@@ -1,0 +1,73 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ignore="http://www.galasoft.ch/ignore"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:Custom="http://www.galasoft.ch/mvvmlight" x:Class="ZoDream.Number.View.FilterView"
+        mc:Ignorable="d ignore"
+        Title="号码搜索"
+        Icon="/ZoDream.Number;component/Image/zodream.ico" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ZoDream.Number;component/Skins/FilterSkin.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.DataContext>
+        <Binding Path="Filter" Source="{StaticResource Locator}"/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <ComboBox SelectedIndex="{Binding SearchKind}" ToolTip="只有手机号支持正则匹配手机号，但是查询很慢">
+            <ComboBoxItem>手机号</ComboBoxItem>
+            <ComboBoxItem>城市</ComboBoxItem>
+            <ComboBoxItem>运营商</ComboBoxItem>
+            <ComboBoxItem>尾号匹配</ComboBoxItem>
+            <ComboBoxItem>开头匹配</ComboBoxItem>
+            <ComboBoxItem>中间匹配</ComboBoxItem>
+        </ComboBox>
+        <ComboBox x:Name="RulesCb" Grid.Row="0" Style="{StaticResource PatternStyle}" Grid.Column="1" ItemsSource="{Binding NumberRules}" 
+			Text="{Binding Pattern}" DisplayMemberPath="Name">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <Custom:EventToCommand Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding ElementName=RulesCb,Path=SelectedItem}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ComboBox>
+        <Button Content="搜索" Command="{Binding SearchCommand}" Grid.Row="0" Grid.Column="2"/>
+        <ListView Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" ItemsSource="{Binding NumberList}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="号码" Width="200" DisplayMemberBinding="{Binding Path=Number}"/>
+                    <GridViewColumn Header="号段" Width="200" DisplayMemberBinding="{Binding Path=Section}"/>
+                    <GridViewColumn Header="归属地" Width="200" DisplayMemberBinding="{Binding Path=City}"/>
+                    <GridViewColumn Header="运营商" Width="100" DisplayMemberBinding="{Binding Path=Type}"/>
+                    <GridViewColumn Header="区号" Width="50" DisplayMemberBinding="{Binding Path=CityCode}"/>
+                    <GridViewColumn Header="邮编" Width="100" DisplayMemberBinding="{Binding Path=PostCode}"/>
+                </GridView>
+            </ListView.View>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="导出">
+                        <MenuItem Header="号码" Command="{Binding ExportNumberCommand}"/>
+                        <MenuItem Header="全部" Command="{Binding ExportAllCommand}"/>
+                    </MenuItem>
+                </ContextMenu>
+            </ListView.ContextMenu>
+        </ListView>
+        <TextBlock Text="{Binding Message}" Grid.Row="2" Grid.ColumnSpan="3"/>
+    </Grid>
+</Window>

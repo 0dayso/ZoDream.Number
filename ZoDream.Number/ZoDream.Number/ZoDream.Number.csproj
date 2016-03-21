@@ -97,6 +97,7 @@
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -126,6 +127,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Comparer\NumberItemComparer.cs" />
     <Compile Include="Comparer\UrlItemComparer.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Helper\Browser\DWebBrowserEvent2.cs" />
@@ -133,6 +135,8 @@
     <Compile Include="Helper\Browser\ReflectionService.cs" />
     <Compile Include="Helper\Browser\WebBrowserHelper.cs" />
     <Compile Include="Helper\Browser\WebBrowserHelper.WebBrowserEvent.cs" />
+    <Compile Include="Helper\DatabaseHelper.cs" />
+    <Compile Include="Helper\Database\MySqlHelper.cs" />
     <Compile Include="Helper\ExportHelper.cs" />
     <Compile Include="Helper\Export\Csv.cs" />
     <Compile Include="Helper\Export\Excel.cs" />
@@ -151,23 +155,48 @@
     <Compile Include="Helper\UrlHelper.cs" />
     <Compile Include="Model\DataItem.cs" />
     <Compile Include="Model\DataService.cs" />
+    <Compile Include="Model\NumberInformation.cs" />
+    <Compile Include="Model\NumberItem.cs" />
     <Compile Include="Model\FileItem.cs" />
     <Compile Include="Model\IDataService.cs" />
     <Compile Include="Model\MobileItem.cs" />
+    <Compile Include="Model\NumberRule.cs" />
     <Compile Include="Model\SearchKind.cs" />
+    <Compile Include="Model\ExecuteStatus.cs" />
     <Compile Include="Model\UrlItem.cs" />
+    <Compile Include="ViewModel\DatabaseViewModel.cs" />
+    <Compile Include="ViewModel\ExportViewModel.cs" />
+    <Compile Include="ViewModel\FilterViewModel.cs" />
+    <Compile Include="ViewModel\ImportViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\MergeFileViewModel.cs" />
     <Compile Include="ViewModel\SearchViewModel.cs" />
     <Compile Include="ViewModel\SpiderViewModel.cs" />
+    <Compile Include="ViewModel\UpdateDatabaseViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="View\FileView.xaml.cs">
-      <DependentUpon>FileView.xaml</DependentUpon>
+    <Compile Include="View\DatabaseView.xaml.cs">
+      <DependentUpon>DatabaseView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ExportView.xaml.cs">
+      <DependentUpon>ExportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FilterView.xaml.cs">
+      <DependentUpon>FilterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ImportView.xaml.cs">
+      <DependentUpon>ImportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MergeFileView.xaml.cs">
+      <DependentUpon>MergeFileView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SearchView.xaml.cs">
       <DependentUpon>SearchView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SpiderView.xaml.cs">
       <DependentUpon>SpiderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UpdateDatabaseView.xaml.cs">
+      <DependentUpon>UpdateDatabaseView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\WebView.xaml.cs">
       <DependentUpon>WebView.xaml</DependentUpon>
@@ -184,6 +213,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Skins\ExportSkin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Skins\FilterSkin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Skins\MainSkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -200,8 +237,24 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\FileView.xaml">
+    <Page Include="View\DatabaseView.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ExportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FilterView.xaml">
+      <SubType>Form</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ImportView.xaml">
+      <SubType>Form</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MergeFileView.xaml">
+      <SubType>Form</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SearchView.xaml">
@@ -209,6 +262,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SpiderView.xaml">
+      <SubType>Form</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UpdateDatabaseView.xaml">
       <SubType>Form</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -298,6 +355,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Rules.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

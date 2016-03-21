@@ -41,6 +41,12 @@ namespace ZoDream.Number.ViewModel
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<SearchViewModel>();
             SimpleIoc.Default.Register<SpiderViewModel>();
+            SimpleIoc.Default.Register<FilterViewModel>();
+            SimpleIoc.Default.Register<DatabaseViewModel>();
+            SimpleIoc.Default.Register<ImportViewModel>();
+            SimpleIoc.Default.Register<MergeFileViewModel>();
+            SimpleIoc.Default.Register<UpdateDatabaseViewModel>();
+            SimpleIoc.Default.Register<ExportViewModel>();
         }
 
         /// <summary>
@@ -82,6 +88,90 @@ namespace ZoDream.Number.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<SpiderViewModel>();
+            }
+        }
+
+        /// <summary>
+        /// Gets the Main property.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public FilterViewModel Filter
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<FilterViewModel>();
+            }
+        }
+
+        /// <summary>
+        /// Gets the Main property.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public DatabaseViewModel Database
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<DatabaseViewModel>();
+            }
+        }
+
+        /// <summary>
+        /// Gets the Main property.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public ImportViewModel Import
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<ImportViewModel>();
+            }
+        }
+
+        /// <summary>
+        /// Gets the Main property.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public MergeFileViewModel MergeFile
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<MergeFileViewModel>();
+            }
+        }
+
+        /// <summary>
+        /// Gets the Main property.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public UpdateDatabaseViewModel UpdateDatabase
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<UpdateDatabaseViewModel>();
+            }
+        }
+
+        /// <summary>
+        /// Gets the Main property.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public ExportViewModel Export
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<ExportViewModel>();
             }
         }
 

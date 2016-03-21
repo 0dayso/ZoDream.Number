@@ -13,9 +13,9 @@ namespace ZoDream.Number.Model
         public string Path { get; set; }
 
 
-        private FileStatus _status;
+        private ExecuteStatus _status;
 
-        public FileStatus Status
+        public ExecuteStatus Status
         {
             get { return _status; }
             set
@@ -33,7 +33,7 @@ namespace ZoDream.Number.Model
             set
             {
                 _message = value;
-               RaisePropertyChanged("Message");
+                RaisePropertyChanged("Message");
             }
         }
 
@@ -44,18 +44,10 @@ namespace ZoDream.Number.Model
 
         public FileItem(string path)
         {
-            Match m = Regex.Match(path, @"\\(?<name>[^\\]+?)\.(?<ext>[^\.\\]+?)$", RegexOptions.RightToLeft);
+            var m = Regex.Match(path, @"\\(?<name>[^\\]+?)\.(?<ext>[^\.\\]+?)$", RegexOptions.RightToLeft);
             Name = m.Groups["name"].Value;
             Kind = m.Groups["ext"].Value;
             Path = path;
         }
-    }
-
-    public enum FileStatus
-    {
-        None,
-        Waiting,
-        Failure,
-        Complete
     }
 }

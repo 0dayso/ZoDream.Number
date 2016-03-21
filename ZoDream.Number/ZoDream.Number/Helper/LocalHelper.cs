@@ -1,15 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.Win32;
 using ZoDream.Number.Model;
 
 namespace ZoDream.Number.Helper
 {
     public class LocalHelper
     {
-        public static MobileItem Get(string number)
+        /// <summary>
+        /// 从文件中直接获取号码
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static List<string> GetNumber(string file)
+        {
+            return NumberHelper.Get(ImportHelper.Import(file));
+        }
+
+        /// <summary>
+        /// 从本地文件中匹配归属地查询
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public static MobileItem GetInformation(string number)
         {
             var match = Regex.Match(number, @"^(?<num>1[34578]\d{5})\d{4}$");
             if (match.Length <= 0)
@@ -21,7 +39,7 @@ namespace ZoDream.Number.Helper
             string line;
             while ((line = sr.ReadLine()) != null)
             {
-                if (line.IndexOf(num) > 0)
+                if (line.IndexOf(num, StringComparison.Ordinal) > 0)
                 {
                     break;
                 }
@@ -68,5 +86,80 @@ namespace ZoDream.Number.Helper
         {
             Process.Start("explorer.exe", path);
         }
+
+
+        /// <summary>
+        /// 遍历文件夹
+        /// </summary>
+        /// <param name="dir"></param>
+        public static List<string> GetAllFile(string dir)
+        {
+            var files = new List<string>();
+            if (string.IsNullOrWhiteSpace(dir))
+            {
+                return files;
+            }
+            var theFolder = new DirectoryInfo(dir);
+            var dirInfo = theFolder.GetDirectories();
+            //遍历文件夹
+            foreach (var nextFolder in dirInfo)
+            {
+                files.AddRange(GetAllFile(nextFolder.FullName));
+            }
+
+            var fileInfo = theFolder.GetFiles();
+            //遍历文件
+            files.AddRange(fileInfo.Select(nextFile => nextFile.FullName));
+            return files;
+        }
+
+        /// <summary>
+        /// 选择文件夹
+        /// </summary>
+        /// <returns></returns>
+        public static string ChooseFolder()
+        {
+            System.Windows.Forms.FolderBrowserDialog folder = new System.Windows.Forms.FolderBrowserDialog();
+            folder.ShowNewFolderButton = false;
+            if (folder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                return folder.SelectedPath;
+            }
+            return null;
+        }
+
+        public static string ChooseSaveFile(string filter = "文本文件|*.txt|CSV文件|*.csv|EXCEL文件|*.xls;*.xlsx|所有文件|*.*")
+        {
+            var open = new SaveFileDialog();
+            open.Title = "选择保存路径";
+            open.Filter = filter;
+            if (open.ShowDialog() == true)
+            {
+                return open.FileName;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 选择多个文件
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> ChooseFile(string filter = "脚本文件|*.txt|所有文件|*.*")
+        {
+            var files = new List<string>();
+            var open = new OpenFileDialog
+            {
+                Multiselect = true,
+                Filter = filter,
+                Title = "选择文件"
+            };
+            if (open.ShowDialog() == true)
+            {
+                files.AddRange(open.FileNames);
+            }
+            return files;
+        }
+
+
     }
 }

@@ -8,6 +8,7 @@ namespace ZoDream.Number.Helper
 {
     public class NumberHelper
     {
+        
         public static List<string> Get(string html)
         {
             return new NumberHelper().GetNumber(html);
@@ -61,6 +62,26 @@ namespace ZoDream.Number.Helper
             }
             hash.Clear();
             return list1;
+        }
+
+        public List<string> GetNumberByRules(IList<string> numbers, string pattern)
+        {
+            return numbers.Where(item => Regex.IsMatch(item, pattern)).ToList();
+        }
+
+        /// <summary>
+        /// 获取号段
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public static string GetSectionNumber(string number)
+        {
+            var match = Regex.Match(number, @"^(?<num>1[34578]\d{5})\d{4}$");
+            if (match.Length <= 0)
+            {
+                return null;
+            }
+            return match.Groups["num"].Value;
         }
     }
 }

@@ -60,14 +60,22 @@
                                Navigated="Browser_Navigated" NewWindow="Browser_NewWindow" DocumentCompleted="Browser_DocumentCompleted"/>
             </wfi:WindowsFormsHost>
             <GridSplitter Grid.Column="0" Width="2"/>
-            <ListBox x:Name="NumberList" Grid.Column="1">
-                <ListBox.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="导出" Click="MenuItem_Click"/>
-                        <MenuItem Header="查看" Click="MenuItem_Click"/>
-                    </ContextMenu>
-                </ListBox.ContextMenu>
-            </ListBox>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <ListBox x:Name="NumberList">
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="导出" Click="MenuItem_Click"/>
+                            <MenuItem Header="查看" Click="MenuItem_Click"/>
+                            <MenuItem Header="清空" Click="MenuItem_Click"/>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
+                <TextBlock Text="{Binding ElementName=NumberList,Path=Items.Count}" Grid.Row="1"/>
+            </Grid>
         </Grid>
         <Grid Grid.Row="2">
             <TextBlock x:Name="MessageTb" Visibility="Collapsed"/>

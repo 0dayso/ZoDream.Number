@@ -87,7 +87,7 @@ namespace ZoDream.Number.View
 
         private void Browser_NewWindow(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //Browser.Url = new System.Uri(((System.Windows.Forms.WebBrowser)sender).StatusText);
+            Browser.Url = new System.Uri(((System.Windows.Forms.WebBrowser)sender).StatusText);
             e.Cancel = true;
         }
 
@@ -141,7 +141,10 @@ namespace ZoDream.Number.View
                     LocalHelper.ExplorePath(AppDomain.CurrentDomain.BaseDirectory + "Mobile");
                     break;
                 case "导出":
-                    _showMessage($"导出成功！位置：{ExportHelper.Export(_numberList)}");
+                    _showMessage($"导出成功！位置：{ExportHelper.ExportRandomName(_numberList)}");
+                    break;
+                case "清空":
+                    _numberList.Clear();
                     break;
             }
         }

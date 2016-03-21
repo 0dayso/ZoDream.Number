@@ -153,6 +153,29 @@ namespace ZoDream.Number.ViewModel
             }
         }
 
+        /// <summary>
+        /// The <see cref="Message" /> property's name.
+        /// </summary>
+        public const string MessagePropertyName = "Message";
+
+        private string _message = string.Empty;
+
+        /// <summary>
+        /// Sets and gets the Message property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public string Message
+        {
+            get
+            {
+                return _message;
+            }
+            set
+            {
+                Set(MessagePropertyName, ref _message, value);
+            }
+        }
+
 
         /// <summary>
         /// The <see cref="UrlsList" /> property's name.
@@ -203,6 +226,7 @@ namespace ZoDream.Number.ViewModel
             {
                 UrlsList.Add(new UrlItem(UrlHelper.GetUrl(BaseUrl)));
             }
+            Message = "自动爬虫启动！";
             _init();
             #region 创造主线程，去分配多个下载线程
             _tokenSource = new CancellationTokenSource();
@@ -257,10 +281,11 @@ namespace ZoDream.Number.ViewModel
                     Thread.Sleep(10000);
                     time --;
                     if (time > 0 && !token1.IsCancellationRequested) continue;
-                    ExportHelper.Export(_numberList);
+                    var file = ExportHelper.ExportRandomName(_numberList);
                     lock (_object)
                     {
                         _numberList.Clear();
+                        Message = "执行自动保存操作，保存到：" + file;
                     }
                     time = Space;
                 }
@@ -330,6 +355,11 @@ namespace ZoDream.Number.ViewModel
             {
                 _numberList.AddRange(lists);
                 _numberList = _numberList.Distinct().ToList();
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Message = $"目前已提取{_numberList.Count}个号码！";
+                });
+                
             }
         }
 
@@ -354,6 +384,46 @@ namespace ZoDream.Number.ViewModel
             {
                 item.Status = UrlStatus.None;
             }
+        }
+
+
+        private RelayCommand _clearCompleteCommand;
+
+        /// <summary>
+        /// Gets the ClearCompleteCommand.
+        /// </summary>
+        public RelayCommand ClearCompleteCommand
+        {
+            get
+            {
+                return _clearCompleteCommand
+                    ?? (_clearCompleteCommand = new RelayCommand(ExecuteClearCompleteCommand));
+            }
+        }
+
+        private void ExecuteClearCompleteCommand()
+        {
+            lock (_object)
+            {
+                for (var i = UrlsList.Count - 1; i >= 0; i--)
+                {
+                    if (UrlsList[i].Status == UrlStatus.Completed)
+                    {
+                        UrlsList.RemoveAt(i);
+                    }
+                }
+            }
+        }
+
+        public override void Cleanup()
+        {
+            _tokenSource.Cancel();
+            UrlsList.Clear();
+            lock (_object)
+            {
+                _numberList.Clear();
+            }
+            base.Cleanup();
         }
 
         public void Dispose()

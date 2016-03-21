@@ -12,7 +12,7 @@ namespace ZoDream.Number.Helper.Export
         /// <summary>
         /// 写入到CSV文件中
         /// </summary>
-        public static void Export(List<string> lists, string fullPath)
+        public static void Export(IList<string> lists, string fullPath)
         {
             var fi = new FileInfo(fullPath);
             if (fi.Directory != null && !fi.Directory.Exists)

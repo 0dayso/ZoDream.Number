@@ -109,10 +109,16 @@ namespace ZoDream.Number.ViewModel
             if (!Regex.IsMatch(Number, @"^1[34578]\d{9}$"))
             {
                 Message = "您输入的手机号有误！";
-                return;
             }
-            Message = Kind == 1 ? HttpHelper.Get(Number).ToString() : LocalHelper.Get(Number).ToString();
+            Message = DatabaseHelper.GetMobile(Number).ToString();
+            //Message = Kind == 1 ? HttpHelper.Get(Number).ToString() : LocalHelper.Get(Number).ToString();
+        }
 
+        public override void Cleanup()
+        {
+            Message = string.Empty;
+            Number = string.Empty;
+            base.Cleanup();
         }
     }
 }

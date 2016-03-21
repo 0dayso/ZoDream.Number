@@ -1,5 +1,7 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Windows;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using ZoDream.Number.Helper;
 using ZoDream.Number.Model;
 using ZoDream.Number.View;
 
@@ -13,48 +15,35 @@ namespace ZoDream.Number.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        private readonly IDataService _dataService;
-
-        /// <summary>
-        /// The <see cref="WelcomeTitle" /> property's name.
-        /// </summary>
-        public const string WelcomeTitlePropertyName = "WelcomeTitle";
-
-        private string _welcomeTitle = string.Empty;
-
-        /// <summary>
-        /// Gets the WelcomeTitle property.
-        /// Changes to that property's value raise the PropertyChanged event. 
-        /// </summary>
-        public string WelcomeTitle
-        {
-            get
-            {
-                return _welcomeTitle;
-            }
-            set
-            {
-                Set(ref _welcomeTitle, value);
-            }
-        }
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(IDataService dataService)
+        public MainViewModel()
         {
-            _dataService = dataService;
-            _dataService.GetData(
-                (item, error) =>
-                {
-                    if (error != null)
-                    {
-                        // Report error here
-                        return;
-                    }
+            
+        }
 
-                    WelcomeTitle = item.Title;
-                });
+        /// <summary>
+        /// The <see cref="DatabaseVisibility" /> property's name.
+        /// </summary>
+        public const string DatabaseVisibilityPropertyName = "DatabaseVisibility";
+
+        private Visibility _databaseVisibility = Visibility.Collapsed;
+
+        /// <summary>
+        /// 必须链接上数据库才能进行操作
+        /// </summary>
+        public Visibility DatabaseVisibility
+        {
+            get
+            {
+                return _databaseVisibility;
+            }
+            set
+            {
+                Set(DatabaseVisibilityPropertyName, ref _databaseVisibility, value);
+            }
         }
 
         private RelayCommand _openWebCommand;
@@ -73,7 +62,7 @@ namespace ZoDream.Number.ViewModel
 
         private void ExecuteOpenWebCommand()
         {
-            (new WebView()).Show();
+            new WebView().Show();
         }
 
         private RelayCommand _openSearchCommand;
@@ -92,7 +81,7 @@ namespace ZoDream.Number.ViewModel
 
         private void ExecuteOpenSearchCommand()
         {
-            (new SearchView()).Show();
+            new SearchView().Show();
         }
 
         private RelayCommand _openFileCommand;
@@ -111,7 +100,7 @@ namespace ZoDream.Number.ViewModel
 
         private void ExecuteOpenFileCommand()
         {
-            (new FileView()).Show();
+            new MergeFileView().Show();
         }
 
         private RelayCommand _openSpiderCommand;
@@ -133,11 +122,110 @@ namespace ZoDream.Number.ViewModel
             (new SpiderView()).Show();
         }
 
-        ////public override void Cleanup()
-        ////{
-        ////    // Clean up if needed
+        private RelayCommand _openFilterCommand;
 
-        ////    base.Cleanup();
-        ////}
+        /// <summary>
+        /// Gets the OpenFilterCommand.
+        /// </summary>
+        public RelayCommand OpenFilterCommand
+        {
+            get
+            {
+                return _openFilterCommand
+                    ?? (_openFilterCommand = new RelayCommand(ExecuteOpenFilterCommand));
+            }
+        }
+
+        private void ExecuteOpenFilterCommand()
+        {
+            new FilterView().Show();
+        }
+
+        private RelayCommand _openDatabaseCommand;
+
+        /// <summary>
+        /// Gets the OpenDatabaseCommand.
+        /// </summary>
+        public RelayCommand OpenDatabaseCommand
+        {
+            get
+            {
+                return _openDatabaseCommand
+                    ?? (_openDatabaseCommand = new RelayCommand(ExecuteOpenDatabaseCommand));
+            }
+        }
+
+        private void ExecuteOpenDatabaseCommand()
+        {
+            var result = new DatabaseView().ShowDialog();
+            if (result == true)
+            {
+                DatabaseVisibility = Visibility.Visible;
+            }
+        }
+
+        private RelayCommand _importCommand;
+
+        /// <summary>
+        /// Gets the ImportCommand.
+        /// </summary>
+        public RelayCommand ImportCommand
+        {
+            get
+            {
+                return _importCommand
+                    ?? (_importCommand = new RelayCommand(ExecuteImportCommand));
+            }
+        }
+
+        private void ExecuteImportCommand()
+        {
+            new ImportView().ShowDialog();
+
+        }
+
+        private RelayCommand _exportCommand;
+
+        /// <summary>
+        /// Gets the ExportCommand.
+        /// </summary>
+        public RelayCommand ExportCommand
+        {
+            get
+            {
+                return _exportCommand
+                    ?? (_exportCommand = new RelayCommand(ExecuteExportCommand));
+            }
+        }
+
+        private void ExecuteExportCommand()
+        {
+            new ExportView().ShowDialog();
+        }
+
+        private RelayCommand _updateDatabaseCommand;
+
+        /// <summary>
+        /// Gets the UpdateDatabaseCommand.
+        /// </summary>
+        public RelayCommand UpdateDatabaseCommand
+        {
+            get
+            {
+                return _updateDatabaseCommand
+                    ?? (_updateDatabaseCommand = new RelayCommand(ExecuteUpdateDatabaseCommand));
+            }
+        }
+
+        private void ExecuteUpdateDatabaseCommand()
+        {
+            new UpdateDatabaseView().Show();
+        }
+
+        public override void Cleanup()
+        {
+            //DatabaseHelper.GetConnection().Close();
+            base.Cleanup();
+        }
     }
 }
