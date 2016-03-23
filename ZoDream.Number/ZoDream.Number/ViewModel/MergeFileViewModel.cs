@@ -219,6 +219,46 @@ namespace ZoDream.Number.ViewModel
             }
         }
 
+        private RelayCommand _exportTxtCommand;
+
+        /// <summary>
+        /// Gets the ExportTxtComand.
+        /// </summary>
+        public RelayCommand ExportTxtComand
+        {
+            get
+            {
+                return _exportTxtCommand
+                    ?? (_exportTxtCommand = new RelayCommand(ExecuteExportTxtComand));
+            }
+        }
+
+        private void ExecuteExportTxtComand()
+        {
+            if (_numberList.Count < 1) return;
+            _showMessage("导出文本成功！路径：" + ExportHelper.ExportRandomName(_numberList, "AllNumbers"));
+        }
+
+        private RelayCommand _exportVcardCommand;
+
+        /// <summary>
+        /// Gets the ExportVcardCommand.
+        /// </summary>
+        public RelayCommand ExportVcardCommand
+        {
+            get
+            {
+                return _exportVcardCommand
+                    ?? (_exportVcardCommand = new RelayCommand(ExecuteExportVcardCommand));
+            }
+        }
+
+        private void ExecuteExportVcardCommand()
+        {
+            if (_numberList.Count < 1) return;
+            _showMessage("导出VCard成功！路径：" + ExportHelper.ExportVcard(_numberList, "AllNumbers"));
+        }
+
         /// <summary>
         /// 遍历文件夹
         /// </summary>
@@ -257,8 +297,10 @@ namespace ZoDream.Number.ViewModel
                 item.Status = ExecuteStatus.Complete;
             }
             _numberList = _numberList.Distinct().ToList();
-            _showMessage("合并完成，保存成功！路径：" + ExportHelper.ExportRandomName(_numberList, "AllNumbers"));
+            _showMessage("合并完成!请导出!");
         }
+
+
 
         private void _showMessage(string message)
         {

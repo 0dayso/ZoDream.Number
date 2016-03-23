@@ -141,6 +141,7 @@
     <Compile Include="Helper\Export\Csv.cs" />
     <Compile Include="Helper\Export\Excel.cs" />
     <Compile Include="Helper\Export\Txt.cs" />
+    <Compile Include="Helper\Export\Vcard.cs" />
     <Compile Include="Helper\HttpHelper.cs" />
     <Compile Include="Helper\Http\Accepts.cs" />
     <Compile Include="Helper\Http\Html.cs" />

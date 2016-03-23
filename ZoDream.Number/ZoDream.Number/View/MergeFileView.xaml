@@ -38,6 +38,10 @@
                         <MenuItem Header="文件夹" Command="{Binding OpenFolderCommand}"/>
                     </MenuItem>
                     <MenuItem Header="开始" Command="{Binding StartCommand}"/>
+                    <MenuItem Header="导出">
+                        <MenuItem Header="文本" Command="{Binding ExportTxtComand}"/>
+                        <MenuItem Header="VCard" Command="{Binding ExportVcardCommand}"/>
+                    </MenuItem>
                     <MenuItem Header="清空" Command="{Binding ClearCommand}"/>
                     <MenuItem Header="查看" Command="{Binding VisitCommand}"/>
                 </ContextMenu>

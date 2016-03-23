@@ -39,5 +39,12 @@ namespace ZoDream.Number.Helper
             Csv.Export(lists, file);
             return file; ;
         }
+
+        public static string ExportVcard(IList<string> lists, string suffix)
+        {
+            var file = GetRandomPath(suffix, "vcf");
+            Vcard.Export(lists, file);
+            return file;
+        }
     }
 }

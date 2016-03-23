@@ -169,7 +169,7 @@ namespace ZoDream.Number.ViewModel
                     _getNumberByRules(Pattern);
                     break;
                 case 1:
-                    _getNumberByCity("m.city LIKE ?pattern", new MySqlParameter("?city", $"%{Pattern}%"));
+                    _getNumberByCity("m.city LIKE ?city", new MySqlParameter("?city", $"%{Pattern}%"));
                     break;
                 case 2:
                     _getNumberByCity("m.type LIKE ?type", new MySqlParameter("?type", $"%{Pattern}%"));
