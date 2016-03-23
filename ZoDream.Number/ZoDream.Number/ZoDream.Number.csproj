@@ -151,6 +151,7 @@
     <Compile Include="Helper\Import\Txt.cs" />
     <Compile Include="Helper\Import\TxtEncoder.cs" />
     <Compile Include="Helper\LocalHelper.cs" />
+    <Compile Include="Helper\NameHelper.cs" />
     <Compile Include="Helper\NumberHelper.cs" />
     <Compile Include="Helper\SpiderHelper.cs" />
     <Compile Include="Helper\UrlHelper.cs" />

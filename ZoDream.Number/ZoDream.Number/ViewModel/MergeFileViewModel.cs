@@ -256,7 +256,11 @@ namespace ZoDream.Number.ViewModel
         private void ExecuteExportVcardCommand()
         {
             if (_numberList.Count < 1) return;
-            _showMessage("导出VCard成功！路径：" + ExportHelper.ExportVcard(_numberList, "AllNumbers"));
+            _showMessage($"导出VCard开始！总共会导出{_numberList.Count / 5000}个文件");
+            Task.Factory.StartNew(() =>
+            {
+                _showMessage("导出VCard成功！路径：" + ExportHelper.ExportVcard(_numberList, "AllNumbers"));
+            });
         }
 
         /// <summary>
