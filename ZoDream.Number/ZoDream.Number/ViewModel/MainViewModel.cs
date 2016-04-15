@@ -141,6 +141,25 @@ namespace ZoDream.Number.ViewModel
             new FilterView().Show();
         }
 
+        private RelayCommand _openWeChatCommand;
+
+        /// <summary>
+        /// Gets the OpenWeChatCommand.
+        /// </summary>
+        public RelayCommand OpenWeChatCommand
+        {
+            get
+            {
+                return _openWeChatCommand
+                    ?? (_openWeChatCommand = new RelayCommand(ExecuteOpenWeChatCommand));
+            }
+        }
+
+        private void ExecuteOpenWeChatCommand()
+        {
+            new WeChatView().Show();
+        }
+
         private RelayCommand _openDatabaseCommand;
 
         /// <summary>

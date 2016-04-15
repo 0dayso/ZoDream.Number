@@ -138,7 +138,15 @@ namespace ZoDream.Number.ViewModel
         {
             Task.Factory.StartNew(() =>
             {
-                _insertNumber();
+                try
+                {
+                    _insertNumber();
+                }
+                catch (Exception ex)
+                {
+                    _showMessage("导入数据库错误！" + ex.Message);
+                }
+                
             });
         }
 
@@ -165,6 +173,26 @@ namespace ZoDream.Number.ViewModel
                     NumberList.RemoveAt(i);
                 }
             }
+        }
+
+        private RelayCommand _clearAllCommand;
+
+        /// <summary>
+        /// Gets the ClearAllCommand.
+        /// </summary>
+        public RelayCommand ClearAllCommand
+        {
+            get
+            {
+                return _clearAllCommand
+                    ?? (_clearAllCommand = new RelayCommand(ExecuteClearAllCommand));
+            }
+        }
+
+        private void ExecuteClearAllCommand()
+        {
+            NumberList.Clear();
+            _showMessage("已清空");
         }
 
         private RelayCommand _repeatCommand;
@@ -231,6 +259,63 @@ namespace ZoDream.Number.ViewModel
                 writer.Close();
                 _showMessage($"导出完成！路径：{file}");
             });
+        }
+
+        private RelayCommand _exportRealCommand;
+
+        /// <summary>
+        /// Gets the ExportRealCommand.
+        /// </summary>
+        public RelayCommand ExportRealCommand
+        {
+            get
+            {
+                return _exportRealCommand
+                    ?? (_exportRealCommand = new RelayCommand(ExecuteExportRealCommand));
+            }
+        }
+
+        private void ExecuteExportRealCommand()
+        {
+            Task.Factory.StartNew(() =>
+            {
+                var file = ExportHelper.GetRandomPath("ExportReal-");
+                var writer = new StreamWriter(file, false, Encoding.UTF8);
+                foreach (var information in NumberList)
+                {
+                    if (information.Status != ExecuteStatus.Real)
+                    {
+                        continue;
+                    }
+                    writer.WriteLine(information.Number);
+                }
+                writer.Close();
+                _showMessage($"导出完成！路径：{file}");
+            });
+        }
+
+        private RelayCommand<int> _doubleCommand;
+
+        /// <summary>
+        /// Gets the DoubleCommand.
+        /// </summary>
+        public RelayCommand<int> DoubleCommand
+        {
+            get
+            {
+                return _doubleCommand
+                    ?? (_doubleCommand = new RelayCommand<int>(ExecuteDoubleCommand));
+            }
+        }
+
+        private void ExecuteDoubleCommand(int index)
+        {
+            if (index < 0 || index >= NumberList.Count)
+            {
+                return;
+            }
+            NumberList[index].Status = NumberList[index].Status == ExecuteStatus.Real ? ExecuteStatus.None : ExecuteStatus.Real;
+
         }
 
         private RelayCommand<DragEventArgs> _fileDrogCommand;

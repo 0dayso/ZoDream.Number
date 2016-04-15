@@ -14,7 +14,7 @@ namespace ZoDream.Number.Helper.Http
         /// <summary>
         /// chrome
         /// </summary>
-        public const string Chrome = "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.122 Safari/534.30";
+        public const string Chrome = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36";
         /// <summary>
         /// 火狐
         /// </summary>
@@ -35,7 +35,7 @@ namespace ZoDream.Number.Helper.Http
         /// <summary>
         /// edge
         /// </summary>
-        public const string Edge = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586";
+        public const string Edge = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.82 Safari/537.36 Edge/14.14316";
 
         /// <summary>
         /// 安卓
@@ -50,5 +50,7 @@ namespace ZoDream.Number.Helper.Http
         /// wp
         /// </summary>
         public const string WM = "Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; NOKIA; Nokia 525) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Mobile Safari/537.36 Edge/13.10586";
+
+        public const string WeChat = "Mozilla/5.0 (Linux; U; Android 2.3.6; zh-cn; GT-S5660 Build/GINGERBREAD) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1 MicroMessenger/4.5.255";
     }
 }

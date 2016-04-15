@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ZoDream.Number.Helper.Http;
 
 namespace ZoDream.Number.Helper
 {
@@ -11,14 +12,22 @@ namespace ZoDream.Number.Helper
         
         public static List<string> Get(string html)
         {
-            return new NumberHelper().GetNumber(html);
+            return new NumberHelper().GetNumberWithText(html);
         }
 
-        public List<string> GetNumber(string html)
+        public List<string> GetNumberWithText(string text)
         {
-            //html = GetText(html).Replace(" ", "");
-            var ms = Regex.Matches(html, @"[1１][34578３４５７８][\d０１２３４５６７８９]{9}");
+            var ms = Regex.Matches(text, @"[1１][34578３４５７８][\d０１２３４５６７８９]{9}");
             return (from Match item in ms select ToDbc(item.Value)).ToList();
+        }
+
+        public List<string> GetNumberWithHtml(string html)
+        {
+            var numbers = GetNumberWithText(html);
+            // 避免 分割开的
+            var helper = new Html(html);
+            numbers.AddRange(GetNumberWithText(helper.GetText().Replace(" ", "")));
+            return numbers.Distinct().ToList();
         }
 
         /// <summary>

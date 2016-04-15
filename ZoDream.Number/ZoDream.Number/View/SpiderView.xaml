@@ -31,28 +31,31 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="开始网址："/>
-                    <TextBox Text="{Binding BaseUrl}" Grid.Row="0" Grid.Column="1" ToolTip="请输入有效的网址"/>
-                    <TextBlock Text="网址类型：" Grid.Row="1" Grid.Column="0" />
-                    <ComboBox Grid.Row="1" Grid.Column="1" SelectedIndex="{Binding Kind}" ToolTip="全网表示不分站内和站外">
+                    <TextBox IsEnabled="{Binding IsEnable}" Text="{Binding BaseUrl}" Grid.Row="0" Grid.Column="1" ToolTip="请输入有效的网址"/>
+                    <TextBlock Text="关键词：" Grid.Row="1"/>
+                    <TextBox IsEnabled="{Binding IsEnable}" Text="{Binding Keywords}" Grid.Row="1" Grid.Column="1" ToolTip="关键词过滤（请用“ ”空白符分割多个）"/>
+                    <TextBlock Text="网址类型：" Grid.Row="2" Grid.Column="0" />
+                    <ComboBox IsEnabled="{Binding IsEnable}" Grid.Row="2" Grid.Column="1" SelectedIndex="{Binding Kind}" ToolTip="全网表示不分站内和站外">
                         <ComboBoxItem>全网</ComboBoxItem>
                         <ComboBoxItem>全站</ComboBoxItem>
                     </ComboBox>
-                    <TextBlock Text="保存间隔：" Grid.Row="2" Grid.Column="0" />
-                    <TextBox Text="{Binding Space}" Grid.Row="2" Grid.Column="1" ToolTip="以分为单位"/>
-                    <TextBlock Text="线程数：" Grid.Row="3" Grid.Column="0" />
-                    <TextBox Text="{Binding Count}" Grid.Row="3" Grid.Column="1" ToolTip="取正数，默认为20"/>
-                    <TextBlock Text="深度：" Grid.Row="4" Grid.Column="0" />
-                    <TextBox Text="{Binding Depth}" Grid.Row="4" Grid.Column="1" ToolTip="取正数，0或空表示不限"/>
+                    <TextBlock Text="保存间隔：" Grid.Row="3" Grid.Column="0" />
+                    <TextBox IsEnabled="{Binding IsEnable}" Text="{Binding Space}" Grid.Row="3" Grid.Column="1" ToolTip="以分为单位"/>
+                    <TextBlock Text="线程数：" Grid.Row="4" Grid.Column="0" />
+                    <TextBox IsEnabled="{Binding IsEnable}" Text="{Binding Count}" Grid.Row="4" Grid.Column="1" ToolTip="取正数，默认为20"/>
+                    <TextBlock Text="深度：" Grid.Row="5" Grid.Column="0" />
+                    <TextBox IsEnabled="{Binding IsEnable}" Text="{Binding Depth}" Grid.Row="5" Grid.Column="1" ToolTip="取正数，0或空表示不限"/>
                 </Grid>
             </Expander>
             <StackPanel>
-                <Button Content="开始" Command="{Binding StartCommand}"/>
+                <Button IsEnabled="{Binding IsEnable}" Content="开始" Command="{Binding StartCommand}"/>
                 <Button Content="停止" Command="{Binding StopCommand}"/>
             </StackPanel>
         </Grid>
@@ -65,7 +68,10 @@
             </ListView.View>
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="清除完成" Command="{Binding ClearCompleteCommand}"/>
+                    <MenuItem Header="清除">
+                        <MenuItem Header="已完成" Command="{Binding ClearCompleteCommand}"/>
+                        <MenuItem Header="全部" Command="{Binding ClearCommand}"/>
+                    </MenuItem>
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>

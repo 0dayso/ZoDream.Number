@@ -11,6 +11,7 @@ namespace ZoDream.Number.Model
         None,
         Waiting,
         Failure,
-        Complete
+        Complete,
+        Real
     }
 }

@@ -256,11 +256,33 @@ namespace ZoDream.Number.ViewModel
         private void ExecuteExportVcardCommand()
         {
             if (_numberList.Count < 1) return;
-            _showMessage($"导出VCard开始！总共会导出{_numberList.Count / 5000}个文件");
+            _showMessage("导出VCard开始！总共会导出"+ Math.Ceiling((double)_numberList.Count / 5000) +"个文件");
             Task.Factory.StartNew(() =>
             {
                 _showMessage("导出VCard成功！路径：" + ExportHelper.ExportVcard(_numberList, "AllNumbers"));
             });
+        }
+
+        private RelayCommand _exceptCommand;
+
+        /// <summary>
+        /// Gets the ExceptCommand.
+        /// </summary>
+        public RelayCommand ExceptCommand
+        {
+            get
+            {
+                return _exceptCommand
+                    ?? (_exceptCommand = new RelayCommand(ExecuteExceptCommand));
+            }
+        }
+
+        private void ExecuteExceptCommand()
+        {
+            var numbers = LocalHelper.GetNumber(LocalHelper.ChooseFile());
+            if (numbers.Count <= 0) return;
+            numbers = _numberList.Except(numbers).ToList();
+            _showMessage("导出差集文本成功！路径：" + ExportHelper.ExportRandomName(numbers, "ExceptNumbers"));
         }
 
         /// <summary>
@@ -301,7 +323,7 @@ namespace ZoDream.Number.ViewModel
                 item.Status = ExecuteStatus.Complete;
             }
             _numberList = _numberList.Distinct().ToList();
-            _showMessage("合并完成!请导出!");
+            _showMessage($"总共合并了{_numberList.Count}个号码!请导出!");
         }
 
 

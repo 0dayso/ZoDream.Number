@@ -18,7 +18,11 @@ namespace ZoDream.Number.Helper.Http
 
         public string UserAgent { get; set; } = UserAgents.Firefox;
 
+        public string Referer { get; set; } = "";
+
         public string Cookie { get; set; }
+
+        public CookieCollection Cookies { get; set; }
 
         public Request()
         {
@@ -58,6 +62,14 @@ namespace ZoDream.Number.Helper.Http
             return GetHtml(request);
         }
 
+        public string Post(string param)
+        {
+            var request = GetRequest();
+            _post(request, param);
+            _setProperty(request);
+            return GetHtml(request);
+        }
+
         public WebRequest GetRequest()
         {
             WebRequest request = WebRequest.Create(Url);
@@ -69,13 +81,9 @@ namespace ZoDream.Number.Helper.Http
         private void _setProperty(WebRequest request)
         {
             request.Timeout = 10000;
-            var headers = new WebHeaderCollection
-            {
-                {HttpRequestHeader.AcceptEncoding, "gzip, deflate"},
-                {HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3"},
-                {HttpRequestHeader.CacheControl, "max-age=0"}
-            };
-            request.Headers = headers;
+            request.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
+            request.Headers.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3");
+            request.Headers.Add(HttpRequestHeader.CacheControl, "max-age=0");
             _setHeader((HttpWebRequest) request);
             if (!Regex.IsMatch(Url, "^https://")) return;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
@@ -110,7 +118,7 @@ namespace ZoDream.Number.Helper.Http
             request.Accept = Accept;
             request.KeepAlive = true;
             request.UserAgent = UserAgent;
-            request.Referer = "";
+            request.Referer = Referer;
             request.AllowAutoRedirect = true;
             request.ProtocolVersion = HttpVersion.Version11;
             _setCookie(request);
@@ -128,10 +136,11 @@ namespace ZoDream.Number.Helper.Http
             {
                 request.Headers[HttpRequestHeader.Cookie] = Cookie;
             }
-            //if (cookies != null && cookies.CookieCollection != null && cookies.CookieCollection.Count > 0)
-            //{
-            //    request.CookieContainer.Add(cookies.CookieCollection);
-            //}
+
+            if (Cookies != null && Cookies.Count > 0)
+            {
+                request.CookieContainer.Add(Cookies);
+            }
         }
 
         private void _post(WebRequest request, IDictionary<string, string> param)
@@ -175,14 +184,23 @@ namespace ZoDream.Number.Helper.Http
             return html;
         }
 
-        public string GetHtml(WebResponse response)
+        public HttpWebResponse getResponse(string url)
         {
-            var html = string.Empty;
-            #region 判断解压
+            var request = GetRequest(url);
+            request.Method = "GET";
+            _setProperty(request);
+            return (HttpWebResponse)request.GetResponse();
+        }
 
-            if (((HttpWebResponse) response).StatusCode != HttpStatusCode.OK) return html;
+
+        public MemoryStream getMemoryStream(WebResponse response)
+        {
+            
+            if (((HttpWebResponse)response).StatusCode != HttpStatusCode.OK) return null;
+            #region 判断解压
             Stream stream = null;
             stream = ((HttpWebResponse)response).ContentEncoding.Equals("gzip", StringComparison.InvariantCultureIgnoreCase) ? new GZipStream(response.GetResponseStream(), mode: CompressionMode.Decompress) : response.GetResponseStream();
+            #endregion
             #region 把网络流转成内存流
             var ms = new MemoryStream();
             var buffer = new byte[1024];
@@ -194,13 +212,22 @@ namespace ZoDream.Number.Helper.Http
                 if (sz == 0) break;
                 ms.Write(buffer, 0, sz);
             }
-            #endregion
-
-            var bytes = ms.ToArray();
-            html = GetEncoding(bytes, ((HttpWebResponse)response).CharacterSet).GetString(bytes);
             stream.Close();
-
             #endregion
+            return ms;
+        }
+
+        public string GetHtml(WebResponse response)
+        {
+            var html = string.Empty;
+            var charset = ((HttpWebResponse)response).CharacterSet;
+            var ms = getMemoryStream(response);
+            if (null == ms)
+            {
+                return html;
+            }
+            var bytes = ms.ToArray();
+            html = GetEncoding(bytes, charset).GetString(bytes);
             return html;
         }
 

@@ -13,7 +13,7 @@ namespace ZoDream.Number.Helper.Export
         public static void Export(IList<string> lists, string file)
         {
             file = file.Replace(".vcf", "");
-            int count = lists.Count/5000;
+            int count = (int)Math.Ceiling((double)lists.Count/5000);
             var tasks = new Task[count];
             for (var i = 0; i < count; i++)
             {
@@ -25,10 +25,11 @@ namespace ZoDream.Number.Helper.Export
                     var nameHelper = new NameHelper();
                     for (var j = 0; j < length; j++)
                     {
+                        var name = lists[start + j];
                         writer.WriteLine("BEGIN:VCARD");
                         writer.WriteLine("VERSION:2.1");
-                        writer.WriteLine("N;CHARSET=UTF-8:" + nameHelper.GetRandomName(j % 100));
-                        writer.WriteLine("TEL:" + lists[start + j]);
+                        writer.WriteLine("N;CHARSET=UTF-8:" + name);
+                        writer.WriteLine("TEL:" + name);
                         writer.WriteLine("END:VCARD");
                     }
                     writer.Close();

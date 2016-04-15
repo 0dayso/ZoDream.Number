@@ -21,7 +21,7 @@ namespace ZoDream.Number.Helper.Http
 
         public List<string> GetLinks(string rootUrl)
         {
-            var ms = GetMatches(@"\<a[^\<\>]+?[hH][Rr][Ee][fF][\s]?=[\s""]?(?<href>[^""\<\>\s#]+)[^\<\>]+?\>");
+            var ms = GetMatches(@"\<a[^\<\>]+?[hH][Rr][Ee][fF][\s]?=[\s""']*?(?<href>[^""'\<\>\s#]+)[^\<\>]+?\>");
             List<string> list = new List<string>();
             foreach (Match item in ms)
             {

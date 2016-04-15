@@ -47,6 +47,7 @@ namespace ZoDream.Number.ViewModel
             SimpleIoc.Default.Register<MergeFileViewModel>();
             SimpleIoc.Default.Register<UpdateDatabaseViewModel>();
             SimpleIoc.Default.Register<ExportViewModel>();
+            SimpleIoc.Default.Register<WeChatViewModel>();
         }
 
         /// <summary>
@@ -172,6 +173,20 @@ namespace ZoDream.Number.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<ExportViewModel>();
+            }
+        }
+
+        /// <summary>
+        /// Gets the WeChat property.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public WeChatViewModel WeChat
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<WeChatViewModel>();
             }
         }
 

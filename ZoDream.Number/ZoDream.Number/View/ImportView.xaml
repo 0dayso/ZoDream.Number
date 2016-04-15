@@ -15,7 +15,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <ListView AllowDrop="True" ItemsSource="{Binding NumberList}">
+        <ListView x:Name="NumberList" AllowDrop="True" ItemsSource="{Binding NumberList}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="号码" Width="200" DisplayMemberBinding="{Binding Path=Number}"/>
@@ -27,6 +27,9 @@
                     <command:EventToCommand Command="{Binding FileDrogCommand, Mode=OneWay}"
                                     PassEventArgsToCommand="True" />
                 </i:EventTrigger>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <command:EventToCommand Command="{Binding DoubleCommand}" CommandParameter="{Binding ElementName=NumberList,Path=SelectedIndex}"/>
+                </i:EventTrigger>
             </i:Interaction.Triggers>
             <ListView.ContextMenu>
                 <ContextMenu>
@@ -36,8 +39,14 @@
                     </MenuItem>
                     <MenuItem Header="开始" Command="{Binding StartCommand}"/>
                     <MenuItem Header="去重" Command="{Binding RepeatCommand}"/>
-                    <MenuItem Header="导出" Command="{Binding ExportCommand}"/>
-                    <MenuItem Header="清空已完成" Command="{Binding ClearCommand}"/>
+                    <MenuItem Header="导出">
+                        <MenuItem Header="已失败" Command="{Binding ExportCommand}"/>
+                        <MenuItem Header="已确认" Command="{Binding ExportRealCommand}"/>
+                    </MenuItem>
+                    <MenuItem Header="清空">
+                        <MenuItem Header="已完成" Command="{Binding ClearCommand}"/>
+                        <MenuItem Header="全部" Command="{Binding ClearAllCommand}"/>
+                    </MenuItem>
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>

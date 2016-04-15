@@ -42,6 +42,7 @@
                         <MenuItem Header="文本" Command="{Binding ExportTxtComand}"/>
                         <MenuItem Header="VCard" Command="{Binding ExportVcardCommand}"/>
                     </MenuItem>
+                    <MenuItem Header="比较旧号码" Command="{Binding ExceptCommand}"/>
                     <MenuItem Header="清空" Command="{Binding ClearCommand}"/>
                     <MenuItem Header="查看" Command="{Binding VisitCommand}"/>
                 </ContextMenu>

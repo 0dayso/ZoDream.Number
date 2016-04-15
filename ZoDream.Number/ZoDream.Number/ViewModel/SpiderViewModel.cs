@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using ZoDream.Number.Comparer;
+using System.Text.RegularExpressions;
 
 namespace ZoDream.Number.ViewModel
 {
@@ -30,8 +31,9 @@ namespace ZoDream.Number.ViewModel
         {
         }
 
+        #region 公有属性
         /// <summary>
-        /// The <see cref="BaseUrl" /> property's name.
+        /// The <see cref="BaseUrl" /> 开始网址
         /// </summary>
         public const string BaseUrlPropertyName = "BaseUrl";
 
@@ -54,7 +56,53 @@ namespace ZoDream.Number.ViewModel
         }
 
         /// <summary>
-        /// The <see cref="Kind" /> property's name.
+        /// The <see cref="Keywords" /> 页面关键字
+        /// </summary>
+        public const string KeywordsPropertyName = "Keywords";
+
+        private string _keywords = string.Empty;
+
+        /// <summary>
+        /// Sets and gets the Keywords property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public string Keywords
+        {
+            get
+            {
+                return _keywords;
+            }
+            set
+            {
+                Set(KeywordsPropertyName, ref _keywords, value);
+            }
+        }
+
+        /// <summary>
+        /// The <see cref="IsEnable" /> 开始之后不能更改属性
+        /// </summary>
+        public const string IsEnablePropertyName = "IsEnable";
+
+        private bool _isEnable = true;
+
+        /// <summary>
+        /// Sets and gets the IsEnable property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public bool IsEnable
+        {
+            get
+            {
+                return _isEnable;
+            }
+            set
+            {
+                Set(IsEnablePropertyName, ref _isEnable, value);
+            }
+        }
+
+        /// <summary>
+        /// The <see cref="Kind" /> 扒取类型 全网或全站
         /// </summary>
         public const string KindPropertyName = "Kind";
 
@@ -77,7 +125,7 @@ namespace ZoDream.Number.ViewModel
         }
 
         /// <summary>
-        /// The <see cref="Depth" /> property's name.
+        /// The <see cref="Depth" /> 扒取深度
         /// </summary>
         public const string DepthPropertyName = "Depth";
 
@@ -100,7 +148,7 @@ namespace ZoDream.Number.ViewModel
         }
 
         /// <summary>
-        /// The <see cref="Space" /> property's name.
+        /// The <see cref="Space" /> 保存间隔
         /// </summary>
         public const string SpacePropertyName = "Space";
 
@@ -127,7 +175,7 @@ namespace ZoDream.Number.ViewModel
         }
 
         /// <summary>
-        /// The <see cref="Count" /> property's name.
+        /// The <see cref="Count" /> 启动线程的数量
         /// </summary>
         public const string CountPropertyName = "Count";
 
@@ -154,7 +202,7 @@ namespace ZoDream.Number.ViewModel
         }
 
         /// <summary>
-        /// The <see cref="Message" /> property's name.
+        /// The <see cref="Message" /> 显示的消息
         /// </summary>
         public const string MessagePropertyName = "Message";
 
@@ -178,7 +226,7 @@ namespace ZoDream.Number.ViewModel
 
 
         /// <summary>
-        /// The <see cref="UrlsList" /> property's name.
+        /// The <see cref="UrlsList" /> 网址集合
         /// </summary>
         public const string UrlsListPropertyName = "UrlsList";
 
@@ -200,16 +248,31 @@ namespace ZoDream.Number.ViewModel
             }
         }
 
+        #endregion
+
+        #region 私有属性
+        /// <summary>
+        /// 多线程控制
+        /// </summary>
         private CancellationTokenSource _tokenSource;
 
+        /// <summary>
+        /// 线程锁
+        /// </summary>
         private readonly object _object = new object();
 
+        /// <summary>
+        /// 号码数量
+        /// </summary>
         private List<string> _numberList = new List<string>();
 
+        #endregion
+
+        #region 公有方法
         private RelayCommand _startCommand;
 
         /// <summary>
-        /// Gets the StartCommand.
+        /// 开始扒取
         /// </summary>
         public RelayCommand StartCommand
         {
@@ -227,7 +290,12 @@ namespace ZoDream.Number.ViewModel
                 UrlsList.Add(new UrlItem(UrlHelper.GetUrl(BaseUrl)));
             }
             Message = "自动爬虫启动！";
+            IsEnable = false;
             _init();
+            if (!string.IsNullOrWhiteSpace(Keywords))
+            {
+                _pattern = Keywords.Replace(" ", "|");
+            }
             #region 创造主线程，去分配多个下载线程
             _tokenSource = new CancellationTokenSource();
             var token = _tokenSource.Token;
@@ -269,6 +337,10 @@ namespace ZoDream.Number.ViewModel
                         break;
                     }
                 }
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    IsEnable = true;
+                });
             }, token);
             #endregion
             #region 计时器 做自动导出操作
@@ -281,7 +353,7 @@ namespace ZoDream.Number.ViewModel
                     Thread.Sleep(10000);
                     time --;
                     if (time > 0 && !token1.IsCancellationRequested) continue;
-                    var file = ExportHelper.ExportRandomName(_numberList);
+                    var file = ExportHelper.ExportRandomName(_numberList, "爬虫导出-");
                     lock (_object)
                     {
                         _numberList.Clear();
@@ -292,6 +364,8 @@ namespace ZoDream.Number.ViewModel
             }, token1);
             #endregion
         }
+
+        private string _pattern = string.Empty;
 
         /// <summary>
         /// 初始化 把url的状态设为等待
@@ -332,8 +406,6 @@ namespace ZoDream.Number.ViewModel
         {
             var request = new Request();
             var html = request.Get(item.Url);
-            var helper = new NumberHelper();
-            var lists = helper.GetNumber(html);
             #region 控制深度
             if (item.Depth < Depth || Depth <= 0)
             {
@@ -350,6 +422,12 @@ namespace ZoDream.Number.ViewModel
                     }
                 }
             }
+            if (!string.IsNullOrEmpty(_pattern) && Regex.IsMatch(html, _pattern))
+            {
+                return;
+            }
+            var helper = new NumberHelper();
+            var lists = helper.GetNumberWithHtml(html);
             #endregion
             lock (_object)
             {
@@ -366,7 +444,7 @@ namespace ZoDream.Number.ViewModel
         private RelayCommand _stopCommand;
 
         /// <summary>
-        /// Gets the StopCommand.
+        /// 停止扒取
         /// </summary>
         public RelayCommand StopCommand
         {
@@ -384,13 +462,14 @@ namespace ZoDream.Number.ViewModel
             {
                 item.Status = UrlStatus.None;
             }
+            IsEnable = true;
         }
 
 
         private RelayCommand _clearCompleteCommand;
 
         /// <summary>
-        /// Gets the ClearCompleteCommand.
+        /// 清除已完成的网址.
         /// </summary>
         public RelayCommand ClearCompleteCommand
         {
@@ -415,6 +494,29 @@ namespace ZoDream.Number.ViewModel
             }
         }
 
+        private RelayCommand _clearComman;
+
+        /// <summary>
+        /// 清除所有网址
+        /// </summary>
+        public RelayCommand ClearCommand
+        {
+            get
+            {
+                return _clearComman
+                    ?? (_clearComman = new RelayCommand(ExecuteClearCommand));
+            }
+        }
+
+        private void ExecuteClearCommand()
+        {
+            lock (_object)
+            {
+                UrlsList.Clear();
+            }
+        }
+
+        #endregion
         public override void Cleanup()
         {
             _tokenSource.Cancel();

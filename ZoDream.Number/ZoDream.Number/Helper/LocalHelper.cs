@@ -19,7 +19,19 @@ namespace ZoDream.Number.Helper
         /// <returns></returns>
         public static List<string> GetNumber(string file)
         {
+            
             return NumberHelper.Get(ImportHelper.Import(file));
+        }
+
+        public static List<string> GetNumber(IList<string> files)
+        {
+            var numbers = new List<string>();
+            foreach (var item in files)
+            {
+                numbers.AddRange(GetNumber(item));
+            }
+            numbers = numbers.Distinct().ToList();
+            return numbers;
         }
 
         /// <summary>
@@ -120,6 +132,7 @@ namespace ZoDream.Number.Helper
         public static string ChooseFolder()
         {
             System.Windows.Forms.FolderBrowserDialog folder = new System.Windows.Forms.FolderBrowserDialog();
+            folder.SelectedPath = AppDomain.CurrentDomain.BaseDirectory;
             folder.ShowNewFolderButton = false;
             if (folder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -151,7 +164,8 @@ namespace ZoDream.Number.Helper
             {
                 Multiselect = true,
                 Filter = filter,
-                Title = "选择文件"
+                Title = "选择文件",
+                InitialDirectory = AppDomain.CurrentDomain.BaseDirectory
             };
             if (open.ShowDialog() == true)
             {
@@ -160,6 +174,16 @@ namespace ZoDream.Number.Helper
             return files;
         }
 
-
+        public static void SaveTxt(string text, string file = null)
+        {
+            if (string.IsNullOrEmpty(file))
+            {
+                file = ExportHelper.GetRandomPath("html");
+            }
+            FileStream fs = new FileStream(file, FileMode.Append);
+            StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
+            sw.Write(text);
+            sw.Close();
+        }
     }
 }
