@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ZoDream.Helper.Local;
 using ZoDream.Number.Helper;
 using ZoDream.Number.Model;
 
@@ -138,7 +139,7 @@ namespace ZoDream.Number.View
             switch (item.Header.ToString())
             {
                 case "查看":
-                    LocalHelper.ExplorePath(AppDomain.CurrentDomain.BaseDirectory + "Mobile");
+                    Open.ExplorePath(AppDomain.CurrentDomain.BaseDirectory + "Mobile");
                     break;
                 case "导出":
                     _showMessage($"导出成功！位置：{ExportHelper.ExportRandomName(_numberList)}");

@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ZoDream.Number</RootNamespace>
     <AssemblyName>ZoDream.Number</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -35,6 +35,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -124,6 +125,9 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="ZoDream.Helper">
+      <HintPath>..\..\..\WPF-ZoDream\ZoDream.Helper\ZoDream.Helper\bin\Debug\ZoDream.Helper.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -141,18 +145,10 @@
     <Compile Include="Helper\DatabaseHelper.cs" />
     <Compile Include="Helper\Database\MySqlHelper.cs" />
     <Compile Include="Helper\ExportHelper.cs" />
-    <Compile Include="Helper\Export\Csv.cs" />
     <Compile Include="Helper\Export\Excel.cs" />
     <Compile Include="Helper\Export\Txt.cs" />
     <Compile Include="Helper\Export\Vcard.cs" />
     <Compile Include="Helper\HttpHelper.cs" />
-    <Compile Include="Helper\Http\Accepts.cs" />
-    <Compile Include="Helper\Http\Html.cs" />
-    <Compile Include="Helper\Http\Request.cs" />
-    <Compile Include="Helper\Http\UserAgents.cs" />
-    <Compile Include="Helper\ImportHelper.cs" />
-    <Compile Include="Helper\Import\Txt.cs" />
-    <Compile Include="Helper\Import\TxtEncoder.cs" />
     <Compile Include="Helper\LocalHelper.cs" />
     <Compile Include="Helper\NameHelper.cs" />
     <Compile Include="Helper\NumberHelper.cs" />

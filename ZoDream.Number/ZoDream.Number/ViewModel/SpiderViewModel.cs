@@ -5,7 +5,6 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ZoDream.Number.Helper;
 using ZoDream.Number.Model;
-using ZoDream.Number.Helper.Http;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +12,7 @@ using System.Windows;
 using System.Windows.Threading;
 using ZoDream.Number.Comparer;
 using System.Text.RegularExpressions;
+using ZoDream.Helper.Http;
 
 namespace ZoDream.Number.ViewModel
 {

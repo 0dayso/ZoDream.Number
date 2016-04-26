@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.Command;
 using MySql.Data.MySqlClient;
 using ZoDream.Number.Helper;
 using ZoDream.Number.Model;
+using ZoDream.Helper.Local;
 
 namespace ZoDream.Number.ViewModel
 {
@@ -159,7 +160,7 @@ namespace ZoDream.Number.ViewModel
 
         private void ExecuteOpenSaveCommand()
         {
-            SavePath = LocalHelper.ChooseSaveFile();
+            SavePath = Open.ChooseSaveFile();
         }
 
         private RelayCommand _exportCommand;

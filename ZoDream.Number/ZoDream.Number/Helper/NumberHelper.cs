@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using ZoDream.Number.Helper.Http;
+using ZoDream.Helper;
+using ZoDream.Helper.Http;
 
 namespace ZoDream.Number.Helper
 {
@@ -18,7 +19,7 @@ namespace ZoDream.Number.Helper
         public List<string> GetNumberWithText(string text)
         {
             var ms = Regex.Matches(text, @"[1１][34578３４５７８][\d０１２３４５６７８９]{9}");
-            return (from Match item in ms select ToDbc(item.Value)).ToList();
+            return (from Match item in ms select StringHelper.ToDbc(item.Value)).ToList();
         }
 
         public List<string> GetNumberWithHtml(string html)
@@ -28,28 +29,6 @@ namespace ZoDream.Number.Helper
             var helper = new Html(html);
             numbers.AddRange(GetNumberWithText(helper.GetText().Replace(" ", "")));
             return numbers.Distinct().ToList();
-        }
-
-        /// <summary>
-        /// 全角转半角
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public string ToDbc(string input)
-        {
-            if (input == null) throw new ArgumentNullException(nameof(input));
-            var c = input.ToCharArray();
-            for (var i = 0; i < c.Length; i++)
-            {
-                if (c[i] == 12288)
-                {
-                    c[i] = (char)32;
-                    continue;
-                }
-                if (c[i] > 65280 && c[i] < 65375)
-                    c[i] = (char)(c[i] - 65248);
-            }
-            return new string(c);
         }
 
         /// <summary>

@@ -1,7 +1,8 @@
 ﻿using Newtonsoft.Json;
-using ZoDream.Number.Helper.Http;
 using Newtonsoft.Json.Linq;
 using ZoDream.Number.Model;
+using ZoDream.Helper.Http;
+
 
 namespace ZoDream.Number.Helper
 {
@@ -9,7 +10,7 @@ namespace ZoDream.Number.Helper
     {
         public static MobileItem Get(string number)
         {
-            Request request = new Request("http://zodream.localhost/admin.php/mobile?phone=" + number);
+            var request = new Request("http://zodream.localhost/admin.php/mobile?phone=" + number);
             string html = request.Get();
             JObject jo = (JObject)JsonConvert.DeserializeObject(html);
             if (jo["status"].ToString() == "success")

@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ZoDream.Number.Helper;
 using ZoDream.Number.Model;
+using ZoDream.Helper.Local;
 
 namespace ZoDream.Number.ViewModel
 {
@@ -92,7 +93,7 @@ namespace ZoDream.Number.ViewModel
 
         private void ExecuteOpenFileCommand()
         {
-            var files = LocalHelper.ChooseFile();
+            var files = Open.ChooseFiles();
             foreach (var item in files)
             {
                 _addOne(item);
@@ -115,7 +116,7 @@ namespace ZoDream.Number.ViewModel
 
         private void ExecuteOpenFolderCommand()
         {
-            _findDir(LocalHelper.ChooseFolder());
+            _findDir(Open.ChooseFolder());
         }
 
         private RelayCommand _visitCommand;
@@ -134,7 +135,7 @@ namespace ZoDream.Number.ViewModel
 
         private void ExecuteVisitCommand()
         {
-            LocalHelper.ExplorePath(AppDomain.CurrentDomain.BaseDirectory + "Mobile");
+            Open.ExplorePath(AppDomain.CurrentDomain.BaseDirectory + "Mobile");
         }
 
         private RelayCommand _startCommand;
@@ -279,7 +280,7 @@ namespace ZoDream.Number.ViewModel
 
         private void ExecuteExceptCommand()
         {
-            var numbers = LocalHelper.GetNumber(LocalHelper.ChooseFile());
+            var numbers = LocalHelper.GetNumber(Open.ChooseFile());
             if (numbers.Count <= 0) return;
             numbers = _numberList.Except(numbers).ToList();
             _showMessage("导出差集文本成功！路径：" + ExportHelper.ExportRandomName(numbers, "ExceptNumbers"));
@@ -291,7 +292,7 @@ namespace ZoDream.Number.ViewModel
         /// <param name="dir"></param>
         private void _findDir(string dir)
         {
-            var files = LocalHelper.GetAllFile(dir);
+            var files = Open.GetAllFile(dir);
             foreach (var item in files)
             {
                 _addOne(item);

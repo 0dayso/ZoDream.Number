@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using MySql.Data.MySqlClient;
 using ZoDream.Number.Comparer;
+using ZoDream.Helper.Local;
 
 namespace ZoDream.Number.ViewModel
 {
@@ -96,7 +97,7 @@ namespace ZoDream.Number.ViewModel
 
         private void ExecuteOpenFileCommand()
         {
-            _addNumber(LocalHelper.ChooseFile());
+            _addNumber(Open.ChooseFiles());
             _showMessage($"总共有{NumberList.Count}条号码！请在开始前执行 去重 操作");
         }
 
@@ -116,7 +117,7 @@ namespace ZoDream.Number.ViewModel
 
         private void ExecuteOpenFolderCommand()
         {
-             _addNumber(LocalHelper.GetAllFile(LocalHelper.ChooseFolder()));
+             _addNumber(Open.GetAllFile(Open.ChooseFolder()));
             _showMessage($"总共有{NumberList.Count}条号码！请在开始前执行 去重 操作");
         }
 
@@ -349,7 +350,7 @@ namespace ZoDream.Number.ViewModel
                     }
                     else if (Directory.Exists(item))
                     {
-                        _addNumber(LocalHelper.GetAllFile(item));
+                        _addNumber(Open.GetAllFile(item));
                     }
                 }
                 _showMessage($"总共有{NumberList.Count}条号码！请在开始前执行 去重 操作");

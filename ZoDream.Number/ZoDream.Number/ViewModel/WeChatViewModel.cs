@@ -11,9 +11,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using ZoDream.Helper.Http;
+using ZoDream.Helper.Local;
 using ZoDream.Number.Comparer;
 using ZoDream.Number.Helper;
-using ZoDream.Number.Helper.Http;
 using ZoDream.Number.Model;
 
 namespace ZoDream.Number.ViewModel
@@ -149,10 +150,10 @@ namespace ZoDream.Number.ViewModel
         {
             //https://weixin110.qq.com/security/verifycode
             var http = new Request();
-            using (var response = http.getResponse("https://weixin110.qq.com/security/verifycode"))
+            using (var response = http.GetResponse("https://weixin110.qq.com/security/verifycode"))
             {
                 _cookies = response.Cookies;
-                var stream = http.getMemoryStream(response);
+                var stream = http.GetMemoryStream(response);
                 if (null == stream)
                 {
                     return;
@@ -243,7 +244,7 @@ namespace ZoDream.Number.ViewModel
 
         private void ExecuteOpenFileCommand()
         {
-            _addNumber(LocalHelper.ChooseFile());
+            _addNumber(Open.ChooseFiles());
             _showMessage($"总共有{NumberList.Count}条号码！请在开始前执行 去重 操作");
         }
 
@@ -263,7 +264,7 @@ namespace ZoDream.Number.ViewModel
 
         private void ExecuteOpenFolderCommand()
         {
-            _addNumber(LocalHelper.GetAllFile(LocalHelper.ChooseFolder()));
+            _addNumber(Open.GetAllFile(Open.ChooseFolder()));
             _showMessage($"总共有{NumberList.Count}条号码！请在开始前执行 去重 操作");
         }
 
@@ -350,7 +351,7 @@ namespace ZoDream.Number.ViewModel
                     }
                     else if (Directory.Exists(item))
                     {
-                        _addNumber(LocalHelper.GetAllFile(item));
+                        _addNumber(Open.GetAllFile(item));
                     }
                 }
                 _showMessage($"总共有{NumberList.Count}条号码！请在开始前执行 去重 操作");
